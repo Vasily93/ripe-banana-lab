@@ -52,4 +52,22 @@ describe('testig sudio routes', () => {
         });
       });
   });
+
+  it('get reviewer by id', async() => {
+    const reviewer = await Reviewer.create({ 
+      name: 'somebody',
+      company: 'apple'
+    });
+
+    return request(app)
+      .get(`/api/v1/reviewers/${reviewer._id}`)
+      .then(res => {
+        expect(res.body).toEqual({
+          _id: expect.any(String),
+          name: 'somebody',
+          company: 'apple',
+          __v: 0
+        });
+      });
+  });
 });
