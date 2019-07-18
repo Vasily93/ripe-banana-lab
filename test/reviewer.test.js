@@ -4,7 +4,7 @@ const app = require('../lib/app');
 const request = require('supertest');
 const connect = require('../lib/utils/connect');
 const mongoose = require('mongoose');
-// const Reviewer = require('../lib/models/Reviewer');
+const Reviewer = require('../lib/models/Reviewer');
 
 
 describe('testig sudio routes', () => {
@@ -37,5 +37,19 @@ describe('testig sudio routes', () => {
       });
   });  
   
-  
+  it('getting all reviewer with GET', async() => {
+    const reviewer = await Reviewer.create([{ name: 'somebody', company: 'apple' }]);
+
+    return request(app)
+      .get('/api/v1/reviewers')
+      .then(res => {
+        const reviewerJSON = JSON.parse(JSON.stringify(reviewer));
+        reviewerJSON.forEach(reviewer => {
+          expect(res.body).toContainEqual({
+            _id: reviewer._id,
+            name: reviewer.name
+          });
+        });
+      });
+  });
 });
