@@ -19,7 +19,7 @@ describe('testig sudio routes', () => {
   afterAll(() => {
     return mongoose.connection.close();
   });   
-  it('creates studio with PUT', () => { // doesn't read an id as any string
+  it('creates studio with POST', () => { // doesn't read an id as any string
     return request(app)
       .post('/api/v1/studios')
       .send({
