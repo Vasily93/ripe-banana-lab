@@ -72,4 +72,25 @@ describe('tesind actor routes', () => {
         });
       });
   });
+
+  it('can update an actor with PUT', async() => {
+    const actor = await Actor.create({ 
+      name: 'Brad Pit',
+      DOB: '1993-09-08',
+      POB: 'USA'
+    });
+
+    return request(app)
+      .put(`/api/v1/actors/${actor._id}`)
+      .send({ name: 'Vasily Markov', DOB: '1992-07-02', POB: 'RUS' })
+      .then(res => {
+        const actorJSON = JSON.parse(JSON.stringify(actor));
+        expect(res.body).toEqual({
+          ...actorJSON,
+          name: 'Vasily Markov',
+          DOB: '1992-07-02',
+          POB: 'RUS'
+        });
+      });
+  });
 });
