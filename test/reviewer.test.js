@@ -90,5 +90,16 @@ describe('testig sudio routes', () => {
       });
   });
 
-  
+  it('deletes selected reviewer', async() => {
+    const reviewer = await Reviewer.create({ 
+      name: 'Vasily Markov',
+      company: 'orange'
+    });
+
+    return request(app)
+      .delete(`/api/v1/reviewers/${reviewer._id}`)
+      .then(res => {
+        expect(res.body.name).toEqual('Vasily Markov');
+      });
+  });
 });
