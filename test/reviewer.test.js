@@ -22,7 +22,7 @@ describe('testig sudio routes', () => {
   });
   it('creates reviewer with POST', () => {
     return request(app)
-      .post('/api/v1/reviwers')
+      .post('/api/v1/reviewers')
       .send({
         name: 'somebody',
         company: 'apple'
