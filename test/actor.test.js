@@ -37,5 +37,19 @@ describe('tesind actor routes', () => {
       });
   });
 
-  
+  it('getting all actor with GET', async() => {
+    const actors = await Actor.create({ name: 'Brad Pit' });
+
+    return request(app)
+      .get('/api.v1/actors')
+      .then(res => {
+        const actorsJSON = JSON.parse(JSON.stringify(actors));
+        actorsJSON.forEach(actor => {
+          expect(res.body).toContainEqual({
+            _id: actor._id,
+            name: actor.name
+          });
+        });
+      });
+  });
 });
