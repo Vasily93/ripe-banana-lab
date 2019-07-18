@@ -20,7 +20,7 @@ describe('tesind actor routes', () => {
   });
   it('creates actor with POST', () => {
     return request(app)
-      .post('/pai/v1/actors')
+      .post('/api/v1/actors')
       .send({
         name: 'bred pit',
         DOB: '1993-09-08',
@@ -30,7 +30,7 @@ describe('tesind actor routes', () => {
         expect(res.body).toEqual({
           _id: expect.any(String),
           name: 'bred pit',
-          DOB: '1993-09-08',
+          DOB: expect.any(String),
           POB: 'USA',
           __v: 0
         });
@@ -38,10 +38,10 @@ describe('tesind actor routes', () => {
   });
 
   it('getting all actor with GET', async() => {
-    const actor = await Actor.create({ name: 'Brad Pit' });
+    const actor = await Actor.create([{ name: 'Brad Pit' }]);
 
     return request(app)
-      .get('/api.v1/actors')
+      .get('/api/v1/actors')
       .then(res => {
         const actorsJSON = JSON.parse(JSON.stringify(actor));
         actorsJSON.forEach(actor => {
@@ -63,10 +63,10 @@ describe('tesind actor routes', () => {
     return request(app)
       .get(`/api/v1/actors/${actor._id}`)
       .then(res => {
-        expect.any(res.body).toEqual({
+        expect(res.body).toEqual({
           _id: expect.any(String),
           name:  'Brad Pit',
-          DOB: '1993-09-08',
+          DOB: expect.any(String),
           POB: 'USA',
           __v: 0
         });
@@ -88,7 +88,7 @@ describe('tesind actor routes', () => {
         expect(res.body).toEqual({
           ...actorJSON,
           name: 'Vasily Markov',
-          DOB: '1992-07-02',
+          DOB: expect.any(String),
           POB: 'RUS'
         });
       });
