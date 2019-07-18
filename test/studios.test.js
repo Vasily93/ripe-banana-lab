@@ -27,7 +27,7 @@ describe('testig sudio routes', () => {
         address: {
           city: 'Boston',
           state: 'NY',
-          counry: 'USA'
+          country: 'USA'
         }
       })
       .then(res => {
@@ -37,7 +37,7 @@ describe('testig sudio routes', () => {
           address: {
             city: 'Boston',
             state: 'NY',
-            counry: 'USA',
+            country: 'USA',
           },
           __v: 0
         });
@@ -45,7 +45,7 @@ describe('testig sudio routes', () => {
   });
 
   it('gets all studios', async() => { //TypeError: studiosJSON.forEach is not a function
-    const studios = await Studio.create({ name: 'Warner Beos' });
+    const studios = await Studio.create([{ name: 'Warner Beos' }]);
 
     return request(app)
       .get('/api/v1/studios')
@@ -66,7 +66,7 @@ describe('testig sudio routes', () => {
       address: {
         city: 'Boston',
         state: 'NY',
-        counry: 'USA'
+        country: 'USA'
       }
     });
 
@@ -79,7 +79,7 @@ describe('testig sudio routes', () => {
           address: {
             city: 'Boston',
             state: 'NY',
-            counry: 'USA'
+            country: 'USA'
           },
           __v: 0
         });
