@@ -93,4 +93,18 @@ describe('tesind actor routes', () => {
         });
       });
   });
+
+  it('delets selected actor', async() => {
+    const actor = await Actor.create({ 
+      name: 'Vasily Markov',
+      DOB: '1992-07-02',
+      POB: 'RUS'
+    });
+
+    return request(app)
+      .delete(`/api/v1/actors/${actor._id}`)
+      .then(res => {
+        expect(res.body.name).toEqual('Vasily Markov');
+      });
+  });
 });
