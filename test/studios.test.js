@@ -86,7 +86,20 @@ describe('testig sudio routes', () => {
       });
   });
 
-  it('deletes selected studio', () =>{
-    
-  })
+  it('deletes selected studio', async() =>{
+    const studio = await Studio.create({
+      name: 'Warner Boss',
+      address: {
+        city: 'Boston',
+        state: 'NY',
+        counry: 'USA'
+      }
+    });
+
+    return request(app)
+      .delete(`/api/v1/studios/${studio._id}`)
+      .then(res => {
+        expect(res.body.name).toEqual('Warner Boss');
+      });
+  });
 });
