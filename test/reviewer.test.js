@@ -70,4 +70,23 @@ describe('testig sudio routes', () => {
         });
       });
   });
+
+  it('can update an reviewer with PUT', async() => {
+    const reviewer = await Reviewer.create({ 
+      name: 'somebody',
+      company: 'apple'
+    });
+
+    return request(app)
+      .put(`/api/v1/reviewers/${reviewer._id}`)
+      .send({ name: 'Vasily Markov', company: 'orange' })
+      .then(res => {
+        const reviewerJSON = JSON.parse(JSON.stringify(reviewer));
+        expect(res.body).toEqual({
+          ...reviewerJSON,
+          name: 'Vasily Markov',
+          company: 'orange'
+        });
+      });
+  });
 });
