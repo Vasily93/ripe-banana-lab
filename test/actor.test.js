@@ -5,6 +5,7 @@ const request = require('supertest');
 const connect = require('../lib/utils/connect');
 const mongoose = require('mongoose');
 const Actor = require('../lib/models/Actor');
+const Film = require('../lib/models/Film');
 
 describe('tesind actor routes', () => {
   beforeAll(() => {
@@ -57,18 +58,19 @@ describe('tesind actor routes', () => {
     const actor = await Actor.create({ 
       name: 'Brad Pit',
       DOB: '1993-09-08',
-      POB: 'USA'
+      POB: 'USA',
     });
+
+    const films = await Film.create([{ title: 'Gorilla', released: 2009, cast: [{ actor:actor._id }] }]);
 
     return request(app)
       .get(`/api/v1/actors/${actor._id}`)
       .then(res => {
-        expect(res.body).toEqual({
-          _id: expect.any(String),
-          name:  'Brad Pit',
-          DOB: expect.any(String),
-          POB: 'USA',
-          __v: 0
+        console.log(res.body);
+        const filmsJSON = JSON.parse(JSON.stringify(films));
+        expect(res.body.name).toEqual('Brad Pit');
+        filmsJSON.forEach(film => {
+          expect(res.body.films).toContainEqual(film);
         });
       });
   });
