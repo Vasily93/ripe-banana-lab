@@ -54,20 +54,57 @@ describe('tesing films routes', () => {
   });
 
   it('gets all films', async() => {
-    const film = await Film.create([{ title: 'Goblin', released: 1985, studio  }]);
+    const film = await Film.create([{ title: 'Goblin', released: 1985, studio }]);
     return request(app)
       .get('/api/v1/films')
       .then(res => {
         const filmsJSON = JSON.parse(JSON.stringify(film));
         filmsJSON.forEach(film => {
-          expect(res.body).toContainEqual([{
-            _id: expect.any(String),
-            title:  film.title,
-            studio: expect.any(String),
+          expect(res.body).toContainEqual({
+            _id: film._id,
+            title: film.title,
             released: expect.any(Number),
-            __v:0
-          }]);
+            studio: expect.any(String),
+          });
         });
+      });
+  });
+
+  it('get film by id', async() => {
+    const film = await Film.create({ 
+      title:'Goblin',
+      studio: studio._id,
+      released: 1985,
+      cast:[{ role: 'lead', actor: actor._id }]
+    });
+
+    return request(app)
+      .get(`/api/v1/films/${film._id}`)
+      .then(res => {
+        expect(res.body).toEqual({
+          _id: expect.any(String),
+          title:'Goblin',
+          studio: expect.any(String),
+          released: 1985,
+          cast:[{ _id: expect.any(String),  role: 'lead', actor: expect.any(String) }],
+          //need to add reviews
+          __v: 0
+        });
+      });
+  });
+
+  it('delets selected film', async() => {
+    const film = await Film.create({ 
+      title:'Goblin',
+      studio: studio._id,
+      released: 1985,
+      cast:[{ role: 'lead', actor: actor._id }]
+    });
+
+    return request(app)
+      .delete(`/api/v1/films/${film._id}`)
+      .then(res => {
+        expect(res.body.title).toEqual('Goblin');
       });
   });
 });
