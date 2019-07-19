@@ -52,4 +52,20 @@ describe('tesing reviews routes', () => {
         });
       });
   });
+
+  it('gets 100 most recent reviews', async() => {
+    await Promise.all([...Array(100)].map((i) => {
+      return Review.create({
+        rating: 5,
+        reviewer: reviewer._id,
+        review: `very good movie ${i}`,
+        film: film._id
+      });
+    }));
+    return request(app)
+      .get('/api/v1/reviews')
+      .then(res => {
+        expect(res.body).toHaveLength(100);
+      });
+  });
 });
