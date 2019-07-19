@@ -47,8 +47,26 @@ describe('tesing films routes', () => {
           title:'Goblin',
           studio: expect.any(String),
           released: 1985,
-          cast:[{_id: expect.any(String),  role: 'lead', actor: expect.any(String) }],
+          cast:[{ _id: expect.any(String),  role: 'lead', actor: expect.any(String) }],
           __v:0
+        });
+      });
+  });
+
+  it('gets all films', async() => {
+    const film = await Film.create([{ title: 'Goblin', released: 1985, studio  }]);
+    return request(app)
+      .get('/api/v1/films')
+      .then(res => {
+        const filmsJSON = JSON.parse(JSON.stringify(film));
+        filmsJSON.forEach(film => {
+          expect(res.body).toContainEqual([{
+            _id: expect.any(String),
+            title:  film.title,
+            studio: expect.any(String),
+            released: expect.any(Number),
+            __v:0
+          }]);
         });
       });
   });
