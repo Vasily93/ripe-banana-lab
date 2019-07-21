@@ -7,6 +7,8 @@ const mongoose = require('mongoose');
 const Film = require('../lib/models/Film');
 const Studio = require('../lib/models/Studio');
 const Actor = require('../lib/models/Actor');
+const Review = require('../lib/models/Review');
+const Reviewer = require('../lib/models/Reviewer')
 
 describe('tesing films routes', () => {
   beforeAll(() => {
@@ -28,6 +30,10 @@ describe('tesing films routes', () => {
     actor = JSON.parse(JSON.stringify(await Actor.create({ name: 'Bred' })));
   });
 
+  let reviewer = null;
+  beforeEach(async() => {
+    reviewer = JSON.parse(JSON.stringify(await Reviewer.create({ name: 'Vasily' })));
+  });
 
   afterAll(() => {
     return mongoose.connection.close();
@@ -78,16 +84,18 @@ describe('tesing films routes', () => {
       cast:[{ role: 'lead', actor: actor._id }]
     });
 
+    const reviews = await Review.create([{ rating: 5, review: 'good', reviewer: reviewer._id, film: film._id }]);
+
     return request(app)
       .get(`/api/v1/films/${film._id}`)
       .then(res => {
         expect(res.body).toEqual({
           _id: expect.any(String),
           title:'Goblin',
+          reviews: [{'_id': expect.any(String), 'rating': 5, 'review': 'good', 'reviewer': {'_id': expect.any(String), 'name': 'Vasily'}}],
           studio: expect.any(String),
           released: 1985,
           cast:[{ _id: expect.any(String),  role: 'lead', actor: expect.any(String) }],
-          //need to add reviews
           __v: 0
         });
       });

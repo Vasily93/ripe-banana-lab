@@ -66,7 +66,6 @@ describe('tesind actor routes', () => {
     return request(app)
       .get(`/api/v1/actors/${actor._id}`)
       .then(res => {
-        console.log(res.body);
         const filmsJSON = JSON.parse(JSON.stringify(films));
         expect(res.body.name).toEqual('Brad Pit');
         filmsJSON.forEach(film => {
